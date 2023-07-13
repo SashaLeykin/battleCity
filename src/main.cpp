@@ -1,38 +1,16 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/vec2.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream> 
+#include <chrono>
 
-#include "Renderer/ShaderProgram.h"
+#include "Game/Game.h"
 #include "Resources/ResourcMenager.h"
-#include "Renderer/Texture2D.h"
-
-// vertex
-GLfloat point[] = {
-    0.0f, 50.f, 0.0f,
-    50.f, -50.f, 0.0f,
-   -50.f, -50.f, 0.0f
-};
-
-GLfloat colors[] = {
-    1.0f, 0.0f, 0.0f,
-    0.0f, 1.0f, 0.0f,
-    0.0f, 0.0f, 1.0f
-};
-
-GLfloat texCoord[] = {
-    0.5f, 1.0f,
-    1.0f, 0.0f,
-    0.0f, 0.0f
-};
 
 glm::ivec2 g_windowSize(640, 480);
+Game g_game(g_windowSize);
 
-//int g_windowSizeX = 640;
-//int g_windowSizeY = 480;
 
 void glfwWindowSizeCallback(GLFWwindow* pWindow, int width, int height)
 {
@@ -47,6 +25,7 @@ void glfwKeyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int
     {
         glfwSetWindowShouldClose(pWindow, GL_TRUE);
     }
+    g_game.setKey(key, action);
 }
 
 int main(int argc, char** argv)
@@ -76,93 +55,35 @@ int main(int argc, char** argv)
 
     /* Make the window's context current */
     glfwMakeContextCurrent(pWindow);
+
+    //подкдючение glad
     if (!gladLoadGL())
     {
         std::cout << "Can't load GLAD!" << std::endl;
-        return -1;
+        //return -1;
     }
-
     std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
     
-    glClearColor(1, 1, 0, 1);
+    glClearColor(0, 0, 0, 1);
 
     {
-
-        ResourceMenager resourceManager(argv[0]);        
-        auto pDefaultShaderProgram = resourceManager.loadShaders("DefauldShader", 
-                                                                "res/shaders/vertex.txt", 
-                                                                "res/shaders/fragment.txt");
-        if (!pDefaultShaderProgram)
-        {
-            std::cerr << "Can't creat shader program: " << "DefauldShader" << std::endl;
-            return -1;
-        }
-
-        auto tex = resourceManager.loadTexture("DefaultTexture", "res/textures/map_16x16.png");
-
-        GLuint points_vbo = 0;
-        glGenBuffers(1, &points_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(point), point, GL_STATIC_DRAW);
-
-        GLuint colors_vbo = 0;
-        glGenBuffers(1, &colors_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, colors_vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-
-        GLuint texCoord_vbo = 0;
-        glGenBuffers(1, &texCoord_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, texCoord_vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(texCoord), texCoord, GL_STATIC_DRAW);
-
-        GLuint vao = 0;
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-
-        glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, colors_vbo);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-
-        glEnableVertexAttribArray(2);
-        glBindBuffer(GL_ARRAY_BUFFER, texCoord_vbo);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-
-        pDefaultShaderProgram->use();
-        pDefaultShaderProgram->setInt("tex", 0);
-
-        //создание единичной матрицы
-        glm::mat4 modelMatri_1 = glm::mat4(1.f);
-        //использование функции для перемещения объекта
-        modelMatri_1 = glm::translate(modelMatri_1, glm::vec3(100.f, 200.f, 0.f));
-
-        glm::mat4 modelMatri_2 = glm::mat4(1.f);
-        modelMatri_2 = glm::translate(modelMatri_2, glm::vec3(500.f, 200.f, 0.f));
-
-        //использование функции для отоброжения объекта(проекционная матрица)
-        glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(g_windowSize.x), 0.f, static_cast<float>(g_windowSize.y), -100.f, 100.f);
-
-        pDefaultShaderProgram->setMatrix4("projectionMat", projectionMatrix);
+        ResourceMenager::setExecutablePath(argv[0]);
+        g_game.init(); 
+        auto lastTime = std::chrono::high_resolution_clock::now();
 
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(pWindow))
         {
+            auto currentTime = std::chrono::high_resolution_clock::now();
+            uint64_t duration = std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count();
+                lastTime = currentTime;
+                g_game.update(duration);
+            
             /* Render here */
             glClear(GL_COLOR_BUFFER_BIT);
-
-            pDefaultShaderProgram->use();
-            glBindVertexArray(vao);
-            tex->bind();
-            //прорисовка первого треугольника
-            pDefaultShaderProgram->setMatrix4("modelMat", modelMatri_1);
-            glDrawArrays(GL_TRIANGLES, 0, 3);
-            //прорисовка второго треугольника
-            pDefaultShaderProgram->setMatrix4("modelMat", modelMatri_2);
-            glDrawArrays(GL_TRIANGLES, 0, 3);
+         
+            g_game.render();
 
             /* Swap front and back buffers */
             glfwSwapBuffers(pWindow);
@@ -170,6 +91,7 @@ int main(int argc, char** argv)
             /* Poll for and process events */
             glfwPollEvents();
         }
+        ResourceMenager::unLoadAllResources();
     }
 
     glfwTerminate();

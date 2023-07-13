@@ -1,5 +1,6 @@
 #include "Texture2D.h"
 
+
 namespace Renderer {
 	Renderer::Texture2D::Texture2D(const GLuint width, const GLuint height,
 		const unsigned char* data, const unsigned int channels,
@@ -21,7 +22,6 @@ namespace Renderer {
 
 		glGenTextures(1, &m_ID);
 		glActiveTexture(GL_TEXTURE0);
-
 		glBindTexture(GL_TEXTURE_2D, m_ID);
 		glTexImage2D(GL_TEXTURE_2D, 0, m_mode, m_width, m_height, 0, m_mode, GL_UNSIGNED_BYTE, data);
 
@@ -33,6 +33,7 @@ namespace Renderer {
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+
 	Texture2D& Texture2D::operator=(Texture2D&& texture2D)
 	{
 		glDeleteTextures(1, &m_ID);
@@ -43,6 +44,7 @@ namespace Renderer {
 		m_height = texture2D.m_height;
 		return *this;
 	}
+
 	Texture2D::Texture2D(Texture2D&& texture2D)
 	{
 		m_ID = texture2D.m_ID;
@@ -51,13 +53,30 @@ namespace Renderer {
 		m_width = texture2D.m_width;
 		m_height = texture2D.m_height;
 	}
+
 	Texture2D::~Texture2D()
 	{
 		glDeleteTextures(1, &m_ID);
 	}
+
 	void Texture2D::bind() 
 	{
 		glBindTexture(GL_TEXTURE_2D, m_ID);
+	}
+
+	void Texture2D::addSubTexture(std::string name, const glm::vec2& leftBottonUV, const glm::vec2& rightTopUV)
+	{
+		m_subTextures.emplace(std::move(name), SubTexture2D(leftBottonUV, rightTopUV));
+	}
+	const Texture2D::SubTexture2D& Texture2D::getSubTexture(const std::string& name) const
+	{
+		auto it = m_subTextures.find(name);
+		if (it != m_subTextures.end())
+		{
+			return it->second;
+		}
+		const static SubTexture2D defaultSubTexture;
+		return defaultSubTexture;
 	}
 }
 
