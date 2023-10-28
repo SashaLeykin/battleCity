@@ -3,6 +3,10 @@
 #include <glm/vec2.hpp>
 #include <array>
 
+#include <memory>
+
+class Tank;
+
 class Game {
 public:
 	Game(const glm::ivec2& windowSize);
@@ -28,4 +32,8 @@ private:
 	glm::ivec2 m_windowSize;
 	//переменна дл€ хранени€ состо€ни€ игры
 	GameState m_currentGameState;
+	//std::unique_ptrЧ это интеллектуальный указатель, который владеет другим объектом
+	//  и управл€ет им через указатель и удал€ет этот объект, когда он unique_ptr выходит
+	//  за пределы области действи€.
+	std::unique_ptr<Tank> m_pTank;
 };

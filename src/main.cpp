@@ -70,12 +70,15 @@ int main(int argc, char** argv)
     {
         ResourceMenager::setExecutablePath(argv[0]);
         g_game.init(); 
+        //запись текущего времени
         auto lastTime = std::chrono::high_resolution_clock::now();
 
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(pWindow))
         {
+            //запись времени кадра
             auto currentTime = std::chrono::high_resolution_clock::now();
+            // разница времени
             uint64_t duration = std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count();
                 lastTime = currentTime;
                 g_game.update(duration);
