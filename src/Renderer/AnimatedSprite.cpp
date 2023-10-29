@@ -73,14 +73,16 @@ namespace Renderer {
 				subTexture.leftBottonUV.x, subTexture.rightTopUV.y,
 				subTexture.rightTopUV.x, subTexture.rightTopUV.y,
 
-				subTexture.rightTopUV.x, subTexture.rightTopUV.y,
-				subTexture.rightTopUV.x, subTexture.leftBottonUV.y,
-				subTexture.leftBottonUV.x, subTexture.leftBottonUV.y
+				//subTexture.rightTopUV.x, subTexture.rightTopUV.y,
+				subTexture.rightTopUV.x, subTexture.leftBottonUV.y
+				//subTexture.leftBottonUV.x, subTexture.leftBottonUV.y
 			};
 
-			glBindBuffer(GL_ARRAY_BUFFER, m_textureCoordsVBO);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(textureCoords), &textureCoords);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			//после того как создали VertexBuffer and IndexBuffer
+			m_textureCoordsBuffer.upDate(textureCoords, 2 * 4 * sizeof(GLfloat));
+			//glBindBuffer(GL_ARRAY_BUFFER, m_textureCoordsVBO);
+			//glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(textureCoords), &textureCoords);
+			//glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 			m_dirty = false;
 		}

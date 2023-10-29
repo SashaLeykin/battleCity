@@ -16,6 +16,14 @@ add_executable(${PROJECT_NAME}
 	src/Renderer/Sprite.cpp
 	src/Renderer/AnimatedSprite.cpp
 	src/Renderer/AnimatedSprite.h
+	src/Renderer/VertexBuffer.cpp
+	src/Renderer/VertexBuffer.h
+	src/Renderer/IndexBuffer.cpp
+	src/Renderer/IndexBuffer.h
+	src/Renderer/VertexArray.cpp
+	src/Renderer/VertexArray.h
+	src/Renderer/VertexBufferLayout.cpp
+	src/Renderer/VertexBufferLayout.h
 
 	src/Resources/ResourcMenager.cpp
 	src/Resources/ResourcMenager.h

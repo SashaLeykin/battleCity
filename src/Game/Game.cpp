@@ -26,19 +26,19 @@ Game::~Game()
 
 void Game::render()
 {
-   // ResourceMenager::getAnimatedSprite("NewAnimatedSprite")->render();
+   ResourceMenager::getAnimatedSprite("NewAnimatedSprite")->render();
 
     //проверяем если танк?
     if (m_pTank)
     {
         m_pTank->render();
-    }
-    
+    }    
 }
 
 void Game::update(const uint64_t delta)
 {
-   // ResourceMenager::getAnimatedSprite("NewAnimatedSprite")->update(delta);
+   ResourceMenager::getAnimatedSprite("NewAnimatedSprite")->update(delta);
+   
       //проверяем если танк?  
     if (m_pTank)
     {
