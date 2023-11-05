@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-namespace Renderer {
+namespace RenderEngine {
 	ShaderProgram::ShaderProgram(const std::string& vertexShander, const std::string& fragmentShander)
 	{
 		GLuint vertexShaderID;

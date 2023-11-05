@@ -8,8 +8,9 @@
 
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
-namespace Renderer {
+namespace RenderEngine {
 
 	class Texture2D;
 	class ShaderProgram;
@@ -39,7 +40,10 @@ namespace Renderer {
 		glm::vec2 m_position;
 		glm::vec2 m_size;
 		float m_rotation;
-		GLuint m_VAO;
+
+		//GLuint m_VAO;
+		// גלוסעמ GLuint m_VAO;
+		VertexArray m_vertexArray;
 
 		VertexBuffer m_vertexCoordsBuffer;
 		VertexBuffer m_textureCoordsBuffer;

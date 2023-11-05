@@ -4,7 +4,7 @@
 
 #include <memory>
 
-namespace Renderer {
+namespace RenderEngine {
 	class AnimatedSprite;
 }
 
@@ -19,7 +19,7 @@ public:
 	};
 
 	//конструктор
-	Tank(std::shared_ptr<Renderer::AnimatedSprite> pSprite, const float velocity, const glm::vec2 position);
+	Tank(std::shared_ptr<RenderEngine::AnimatedSprite> pSprite, const float velocity, const glm::vec2 position);
 
 	//для отрисовки
 	void render() const;
@@ -35,7 +35,7 @@ public:
 private:
 	EOrientation m_eOrientation;
 	//переменная самого спрайта в класе
-	std::shared_ptr<Renderer::AnimatedSprite> m_pSprite;
+	std::shared_ptr<RenderEngine::AnimatedSprite> m_pSprite;
 	//переменная подтверждения движения
 	bool m_move;
 	//скорость
