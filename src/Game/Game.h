@@ -2,10 +2,10 @@
 
 #include <glm/vec2.hpp>
 #include <array>
-
 #include <memory>
 
 class Tank;
+class Level;
 
 class Game {
 public:
@@ -23,7 +23,7 @@ private:
 	std::array<bool, 349> m_keys;
 
 	//состо€ние игры
-	enum class GameState {
+	enum class EGameState {
 		Active,
 		Pause
 	};
@@ -31,9 +31,11 @@ private:
 	//дл€ определени€ размера экрана
 	glm::ivec2 m_windowSize;
 	//переменна дл€ хранени€ состо€ни€ игры
-	GameState m_currentGameState;
+	EGameState m_eCurrentGameState;
 	//std::unique_ptrЧ это интеллектуальный указатель, который владеет другим объектом
 	//  и управл€ет им через указатель и удал€ет этот объект, когда он unique_ptr выходит
 	//  за пределы области действи€.
 	std::unique_ptr<Tank> m_pTank;
+	//временно указатель не уровень
+	std::unique_ptr<Level> m_pLevel;
 };

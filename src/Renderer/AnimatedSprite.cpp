@@ -6,13 +6,9 @@
 namespace RenderEngine {
 	AnimatedSprite::AnimatedSprite( std::shared_ptr<Texture2D> pTexture, 
 		std::string initialSubTexturw, 
-		 std::shared_ptr<ShaderProgram> pShaderProgram, 
-		const glm::vec2& position, 
-		const glm::vec2& size, 
-		const float rotation)
+		 std::shared_ptr<ShaderProgram> pShaderProgram)
 		//перредача параметров в конструктор  базавого класса
-		:Sprite(std::move(pTexture), std::move(initialSubTexturw), std::move(pShaderProgram),
-			    position, size, rotation)
+		:Sprite(std::move(pTexture), std::move(initialSubTexturw), std::move(pShaderProgram))
 	{
 		m_currentAnimationDuration = m_stateMap.end();
 	}
@@ -61,7 +57,7 @@ namespace RenderEngine {
 		}
 	}
 
-	void AnimatedSprite::render() const 
+	void AnimatedSprite::render(const glm::vec2& position, const glm::vec2& size, const float rotation) const
 	{
 		if (m_dirty)
 		{
@@ -69,12 +65,12 @@ namespace RenderEngine {
 
 			const GLfloat textureCoords[] = {
 				// u   v
-				subTexture.leftBottonUV.x, subTexture.leftBottonUV.y,
-				subTexture.leftBottonUV.x, subTexture.rightTopUV.y,
+				subTexture.leftBottomUV.x, subTexture.leftBottomUV.y,
+				subTexture.leftBottomUV.x, subTexture.rightTopUV.y,
 				subTexture.rightTopUV.x, subTexture.rightTopUV.y,
 
 				//subTexture.rightTopUV.x, subTexture.rightTopUV.y,
-				subTexture.rightTopUV.x, subTexture.leftBottonUV.y
+				subTexture.rightTopUV.x, subTexture.leftBottomUV.y
 				//subTexture.leftBottonUV.x, subTexture.leftBottonUV.y
 			};
 
@@ -87,6 +83,6 @@ namespace RenderEngine {
 			m_dirty = false;
 		}
 		
-		Sprite::render();
+		Sprite::render(position, size, rotation);
 	}
 }

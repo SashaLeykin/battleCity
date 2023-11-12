@@ -37,17 +37,13 @@ public:
 	
 	static std::shared_ptr<RenderEngine::Sprite> loadSprite(const std::string& spriteName,
 		                                                const std::string& textureName, 
-		                                                const std::string& shaderName, 
-		                                                const unsigned int spriteWidth, 
-		                                                const unsigned int spriteHeight,
+		                                                const std::string& shaderName, 		                                               
 		                                                const std::string& subTextureName = "default");
 	static std::shared_ptr<RenderEngine::Sprite> getSprite(const std::string& spriteName);
 
 	static std::shared_ptr<RenderEngine::AnimatedSprite> loadAnimatedSprite(const std::string& spriteName,
 		                                                const std::string& textureName,
-		                                                const std::string& shaderName,
-	                                                    const unsigned int spriteWidth,
-		                                                const unsigned int spriteHeight,
+		                                                const std::string& shaderName,	                                                   
 		                                                const std::string& subTextureName = "default");
 	static std::shared_ptr<RenderEngine::AnimatedSprite> getAnimatedSprite(const std::string& spriteName);
 
@@ -56,6 +52,10 @@ public:
 		                                                  const std::vector<std::string> subTextures,
 		                                                  const unsigned int subTextureWidth,
 		                                                  const unsigned int subTextureHeight);
+	//для проверки успещно ли открылся файл rapidJson
+	static bool loadJSONResources(const std::string& JSONPath);
+	//для возвращения уровней
+	static const std::vector<std::vector<std::string>>& getLeves() { return m_levels; }
 
 private:
 	static std::string getFileString(const std::string& realativeFilePath);
@@ -72,6 +72,9 @@ private:
 
 	typedef std::map<const std::string, std::shared_ptr<RenderEngine::AnimatedSprite>> AnimatedSpritesMap;
 	static AnimatedSpritesMap m_animatedSprites;
+
+	//объект для хранения уровней
+	static std::vector<std::vector<std::string>> m_levels;
 
 	static std::string m_path;
 };

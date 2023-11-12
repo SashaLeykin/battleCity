@@ -12,16 +12,16 @@ namespace RenderEngine {
 
 		struct SubTexture2D
 		{
-			glm::vec2 leftBottonUV;
+			glm::vec2 leftBottomUV;
 			glm::vec2 rightTopUV;
 
-			SubTexture2D(const glm::vec2& _leftBottonUV, const glm::vec2& _rightTopUV)
-				: leftBottonUV(_leftBottonUV)
+			SubTexture2D(const glm::vec2& _leftBottomUV, const glm::vec2& _rightTopUV)
+				: leftBottomUV(_leftBottomUV)
 				, rightTopUV(_rightTopUV) 
 			{}
 
 			SubTexture2D()
-				: leftBottonUV(0.f)
+				: leftBottomUV(0.f)
 				, rightTopUV(1.f)
 			{}
 		};
@@ -39,7 +39,7 @@ namespace RenderEngine {
 		Texture2D(Texture2D&& texture2D);
 		~Texture2D();
 
-		void addSubTexture(std::string name, const glm::vec2& leftBottoUV, 
+		void addSubTexture(std::string name, const glm::vec2& leftBottomUV, 
 			                                 const glm::vec2& rightTopUV);
 		const SubTexture2D& getSubTexture(const std::string& name) const;
 		unsigned int width() const { return m_width; }

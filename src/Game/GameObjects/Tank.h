@@ -1,36 +1,41 @@
 #pragma once
 
 #include <glm/vec2.hpp>
-
 #include <memory>
+
+#include "IGameObject.h"
 
 namespace RenderEngine {
 	class AnimatedSprite;
 }
 
-class Tank {
+class Tank : public IGameObject {
 public:
 
 	enum class EOrientation {
 		Top,
-		Botton,
+		Bottom,
 		Left,
 		Right
 	};
 
 	//конструктор
-	Tank(std::shared_ptr<RenderEngine::AnimatedSprite> pSprite, const float velocity, const glm::vec2 position);
+	Tank(std::shared_ptr<RenderEngine::AnimatedSprite> pSprite, 
+		const float velocity, 
+		const glm::vec2 position, 
+		const glm::vec2& size);
 
 	//для отрисовки
-	void render() const;
+	void render() const override;
 
 	//установка ориетации(направления) танка
 	void setOrientation(const EOrientation eOrientation);
 
 	//движение танка
 	void move(const bool move);
+
 	//для анимации спрайта
-	void update(const uint64_t delta);
+	void update(const uint64_t delta) override;
 
 private:
 	EOrientation m_eOrientation;
@@ -39,9 +44,7 @@ private:
 	//переменная подтверждения движения
 	bool m_move;
 	//скорость
-	float m_velocity;
-	//позиция
-	glm::vec2 m_position;
+	float m_velocity;	
 	//переменная для хранения направдения движения танка
 	glm::vec2 m_moveOffset;
 };
