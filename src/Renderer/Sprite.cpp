@@ -14,7 +14,8 @@ namespace RenderEngine {
 		            std::string initialSubTexture,
 		            std::shared_ptr<ShaderProgram> pShaderProgram)
 					: m_pTexture(std::move(pTexture))
-					, m_pShaderProgram(std::move(pShaderProgram))					
+					, m_pShaderProgram(std::move(pShaderProgram)) 
+					, m_lastFrameId(0)
 	{		
 		//прямоугольник можно отрисовать по 4 вертоксам но все равно 2 треугольниками
 		const GLfloat vertexCoords[] = {
@@ -72,8 +73,28 @@ namespace RenderEngine {
 		//glDeleteBuffers(1, &m_EBO);
 		//glDeleteVertexArrays(1, &m_VAO);
 	}
-	void Sprite::render(const glm::vec2& position, const glm::vec2& size, const float rotation) const
+	void Sprite::render(const glm::vec2& position, const glm::vec2& size, const float rotation, const size_t frameId) const
 	{
+		//проверка текущий кадр равен ли предыдущему если не равен то перерисовываю
+		if (m_lastFrameId != frameId)
+		{
+			m_lastFrameId = frameId;
+
+			//описание текущего кадра который нужно отрисовать
+			const FrameDescription& currentFrameDescription = m_framesDescriptions[frameId];
+
+			//координаты текстуры
+			const GLfloat textureCoords[] = {
+				// u   v
+				currentFrameDescription.leftBottomUV.x, currentFrameDescription.leftBottomUV.y,
+				currentFrameDescription.leftBottomUV.x, currentFrameDescription.rightTopUV.y,
+				currentFrameDescription.rightTopUV.x, currentFrameDescription.rightTopUV.y,
+				currentFrameDescription.rightTopUV.x, currentFrameDescription.leftBottomUV.y
+			};
+			//после того как создали VertexBuffer and IndexBuffer
+			m_textureCoordsBuffer.upDate(textureCoords, 2 * 4 * sizeof(GLfloat));
+		}		
+
 		m_pShaderProgram->use();
 
 		glm::mat4 model(1.f);
@@ -90,5 +111,19 @@ namespace RenderEngine {
 		m_pTexture->bind();
 		
 		Renderer::Draw(m_vertexArray, m_indexBuffer, *m_pShaderProgram);
-	}	
+	}
+	void Sprite::insertFrames(std::vector<FrameDescription> framesDescriptions)
+	{
+		m_framesDescriptions = std::move(framesDescriptions);
+	}
+	uint64_t Sprite::getFrameDuration(const size_t frameId) const
+	{
+		return m_framesDescriptions[frameId].duration;
+	}
+
+	size_t Sprite::getFrameCount() const
+	{
+		return m_framesDescriptions.size();
+	}
+
 }
