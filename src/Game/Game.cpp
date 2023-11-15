@@ -98,23 +98,7 @@ bool Game::init()
         std::cerr << "Can't creat shader program: " << "spriteShader" << std::endl;
         return false;
     }
-      
-    //auto pTextureAtlas = ResourceMenager::loatTextureAtlas("DefaultTextureAtlas", "res/textures/map_16x16.png", std::move(subTexturesNames), 16, 16);
-    auto pTextureAtlas = ResourceMenager::getTexture("mapTextureAtlas");
-    if (!pTextureAtlas)
-    {
-        std::cerr << "Can't find texture atlas: " << "mapTextureAtlas" << std::endl;
-        return false;
-    }
-
-    auto pTanksTextureAtlas = ResourceMenager::getTexture("tanksTextureAtlas");
-    if (!pTanksTextureAtlas)
-    {
-        std::cerr << "Can't find texture atlas: " << "tanksTextureAtlas" << std::endl;
-        return false;
-    }
-
-    
+       
     //использование функции для отоброжения объекта(проекционная матрица)
     glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(m_windowSize.x), 0.f, static_cast<float>(m_windowSize.y), -100.f, 100.f);
 
@@ -125,11 +109,7 @@ bool Game::init()
     pSpriteShaderProgram->setMatrix4("projectionMat", projectionMatrix);
 
     //инициализация танка 
-    m_pTank = std::make_unique<Tank>(ResourceMenager::getSprite("tankSprite_top"),
-                                     ResourceMenager::getSprite("tankSprite_bottom"),
-                                     ResourceMenager::getSprite("tankSprite_left"),
-                                     ResourceMenager::getSprite("tankSprite_right"),
-                                     0.0000001f, glm::vec2(0), glm::vec2(16.f, 16.f));
+    m_pTank = std::make_unique<Tank>(0.0000001f, glm::vec2(0), glm::vec2(16.f, 16.f));
 
     //загрузка уровня
     m_pLevel = std::make_unique<Level>(ResourceMenager::getLeves()[0]);
