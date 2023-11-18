@@ -91,6 +91,9 @@ int main(int argc, char** argv)
 
     RenderEngine::Renderer::setClearColor(0, 0, 0, 1);
    // glClearColor(0, 0, 0, 1);
+   
+    //включение буфера глубины
+    RenderEngine::Renderer::setDepthTest(true);
 
     {
         ResourceMenager::setExecutablePath(argv[0]);

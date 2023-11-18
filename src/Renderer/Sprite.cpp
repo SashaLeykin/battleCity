@@ -73,7 +73,7 @@ namespace RenderEngine {
 		//glDeleteBuffers(1, &m_EBO);
 		//glDeleteVertexArrays(1, &m_VAO);
 	}
-	void Sprite::render(const glm::vec2& position, const glm::vec2& size, const float rotation, const size_t frameId) const
+	void Sprite::render(const glm::vec2& position, const glm::vec2& size, const float rotation, const float layer, const size_t frameId) const
 	{
 		//проверка текущий кадр равен ли предыдущему если не равен то перерисовываю
 		if (m_lastFrameId != frameId)
@@ -106,6 +106,8 @@ namespace RenderEngine {
 		model = glm::scale(model, glm::vec3(size, 1.f));
 			
 		m_pShaderProgram->setMatrix4("modelMat", model);
+		//для определения глубины в шейдере uniform level
+		m_pShaderProgram->setFloat("layer", layer); //layer - слой
 
 		glActiveTexture(GL_TEXTURE0);
 		m_pTexture->bind();

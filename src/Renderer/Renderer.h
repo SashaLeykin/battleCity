@@ -14,6 +14,8 @@ namespace RenderEngine {
 		static void Draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const ShaderProgram& shader);
 		//убрать из main функции цвета фона программы
 		static void setClearColor(float r, float g, float b, float a);
+		//для включения буфера глубины
+		static void setDepthTest(const bool enable);
 		static void clear();
 		static void setVieport(unsigned int width, unsigned int height, 
 			unsigned int leftOffset = 0, unsigned int bottonOffset = 0);
