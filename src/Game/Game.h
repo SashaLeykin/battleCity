@@ -18,6 +18,10 @@ public:
 	//для надатия клавишь в игре
 	void setKey(const int key, const int action);
 	bool init();
+
+	//получить размер текущего уровня
+	size_t getCurrentLevelWidth() const;
+	size_t getCurrentLevelHeight() const;
 		
 private:
 	std::array<bool, 349> m_keys;

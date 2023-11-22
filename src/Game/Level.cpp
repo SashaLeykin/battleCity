@@ -6,16 +6,14 @@
 #include "GameObjects/Ice.h"
 #include "GameObjects/Water.h"
 #include "GameObjects/Eagle.h"
+#include "GameObjects/Border.h"
 
 #include <iostream>
-
-//константную переменную размер блока
-const unsigned int BLOCK_SIZE = 16;
 
 //функция createGameObjectFromDescription - создать игровой объект из описания(по блокам)
 std::shared_ptr<IGameObject> createGameObjectFromDescription(const char description,
 															 const glm::vec2& position, 
-                                                             const glm::vec2 size,
+                                                             const glm::vec2& size,
 															 const float rotation)
 {
 	switch (description)
@@ -79,32 +77,77 @@ Level::Level(const std::vector<std::string>& levelDescription)
     //задаем длину и ширину карты (ширина = размер строки, длина размер вектора(кол-во строк))
     m_width = levelDescription[0].length();
     m_height = levelDescription.size();
+
+    //если не назначено положение танка
+    m_playerRespawn_1 = { BLOCK_SIZE * (m_width / 2 - 1), BLOCK_SIZE / 2 };
+    m_playerRespawn_2 = { BLOCK_SIZE * (m_width / 2 + 3), BLOCK_SIZE / 2 };
+    m_enemyRespawn_1 =  { BLOCK_SIZE ,                    BLOCK_SIZE * m_height - BLOCK_SIZE /2 };
+    m_enemyRespawn_2 =  { BLOCK_SIZE * (m_width / 2 + 1), BLOCK_SIZE * m_height - BLOCK_SIZE / 2};
+    m_enemyRespawn_3 =  { BLOCK_SIZE * m_width,           BLOCK_SIZE * m_height - BLOCK_SIZE / 2 };
+
     //резервируем место в массиве
-    m_levelObjects.reserve(m_width * m_height);
+    m_levelObjects.reserve(m_width * m_height + 4);
     //создаем переменную для хранения текущего нижнего значения
-    unsigned int currentBottomOffset = static_cast<unsigned int>(BLOCK_SIZE * (m_height - 1));
+    unsigned int currentBottomOffset = static_cast<unsigned int>(BLOCK_SIZE * (m_height - 1) + BLOCK_SIZE / 2.f);
     //считывание  массива карты(проход по строкам)
     for (const std::string currentRow : levelDescription)
     {
-        unsigned int currentLeftOffset = 0;
+        unsigned int currentLeftOffset = BLOCK_SIZE;
         //проход по каэдой букве в строке
         for (const char currentElement : currentRow)
         {
-            //в хависимости от знака записывается в массив для хранения игровых объектов
-            m_levelObjects.emplace_back(createGameObjectFromDescription(currentElement, 
-                                                                glm::vec2(currentLeftOffset, currentBottomOffset), 
-                                                                glm::vec2(BLOCK_SIZE, BLOCK_SIZE), 0.f));
+            switch (currentElement)
+            {
+            case 'K':
+                m_playerRespawn_1 = { currentLeftOffset , currentBottomOffset };
+                break;
+            case 'L':
+                m_playerRespawn_2 = { currentLeftOffset , currentBottomOffset };
+                break;
+            case 'M':
+               m_enemyRespawn_1 = { currentLeftOffset , currentBottomOffset };
+                break;
+            case 'N':
+                m_enemyRespawn_2 = { currentLeftOffset , currentBottomOffset };
+                break;
+            case 'O':
+                m_enemyRespawn_3 = { currentLeftOffset , currentBottomOffset };
+                break;
+            default:
+                //в хависимости от знака записывается в массив для хранения игровых объектов
+                m_levelObjects.emplace_back(createGameObjectFromDescription(currentElement,
+                                                               glm::vec2(currentLeftOffset, currentBottomOffset),
+                                                               glm::vec2(BLOCK_SIZE, BLOCK_SIZE), 0.f));
+                break;
+            }
+           
             currentLeftOffset += BLOCK_SIZE;
         }
         currentBottomOffset -= BLOCK_SIZE;
     }
 
+    //botoom border нижняя граница карты
+    m_levelObjects.emplace_back(std::make_shared<Border>(glm::vec2(BLOCK_SIZE, 0.f), 
+                                                         glm::vec2(m_width * BLOCK_SIZE, BLOCK_SIZE / 2.f), 
+                                                         0.f, 0.f));
+    //Top border верхняя граница карты
+    m_levelObjects.emplace_back(std::make_shared<Border>(glm::vec2(BLOCK_SIZE, m_height * BLOCK_SIZE + BLOCK_SIZE / 2.f),
+                                                         glm::vec2(m_width * BLOCK_SIZE, BLOCK_SIZE / 2.f), 
+                                                         0.f, 0.f));
+    //left border левая граница карты
+    m_levelObjects.emplace_back(std::make_shared<Border>(glm::vec2(0.f, 0.f),
+                                                         glm::vec2(BLOCK_SIZE, (m_height + 1) * BLOCK_SIZE),
+                                                         0.f, 0.f));
+    //rigth border правая граница карты
+    m_levelObjects.emplace_back(std::make_shared<Border>(glm::vec2((m_width + 1) * BLOCK_SIZE, 0.f),
+                                                         glm::vec2(BLOCK_SIZE * 2.f, (m_height + 1) * BLOCK_SIZE),
+                                                         0.f, 0.f));
 }
 
 void Level::render() const
 {
     //проход по всем игровым объектам
-    for (const auto currentLevelObject : m_levelObjects)
+    for (const auto& currentLevelObject : m_levelObjects)
     {
         //если массив не пустой рисуем карту
         if (currentLevelObject)
@@ -123,4 +166,14 @@ void Level::update(const uint64_t delta)
             currentLevelObject->update(delta);
         }
     }
+}
+
+size_t Level::getLevelWidth() const
+{
+    return (m_width + 3) * BLOCK_SIZE;
+}
+
+size_t Level::getLevelHeight() const
+{
+    return (m_height +1) * BLOCK_SIZE;
 }

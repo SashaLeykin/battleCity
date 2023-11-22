@@ -99,6 +99,11 @@ bool Game::init()
         return false;
     }
        
+    //
+    m_pLevel = std::make_unique<Level>(ResourceMenager::getLeves()[0]);
+    m_windowSize.x = static_cast<int>(m_pLevel->getLevelWidth());
+    m_windowSize.y = static_cast<int>(m_pLevel->getLevelHeight());
+
     //использование функции для отоброжения объекта(проекционная матрица)
     glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(m_windowSize.x), 0.f, static_cast<float>(m_windowSize.y), -100.f, 100.f);
 
@@ -109,10 +114,21 @@ bool Game::init()
     pSpriteShaderProgram->setMatrix4("projectionMat", projectionMatrix);
 
     //инициализация танка 
-    m_pTank = std::make_unique<Tank>(0.0000001f, glm::vec2(0), glm::vec2(16.f, 16.f), 0.f);
+    m_pTank = std::make_unique<Tank>(0.0000001f, m_pLevel->getPlayerRespawn_1(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f);
 
     //загрузка уровня
-    m_pLevel = std::make_unique<Level>(ResourceMenager::getLeves()[1]);
+   // m_pLevel = std::make_unique<Level>(ResourceMenager::getLeves()[1]);
 
 	return true;
+}
+
+//получить размер текущего уровня
+size_t Game::getCurrentLevelWidth() const
+{
+    return m_pLevel->getLevelWidth();
+}
+
+size_t Game::getCurrentLevelHeight() const
+{
+    return m_pLevel->getLevelHeight();
 }

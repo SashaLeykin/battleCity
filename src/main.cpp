@@ -19,20 +19,22 @@ void glfwWindowSizeCallback(GLFWwindow* pWindow, int width, int height)
     g_windowSize.x = width;
     g_windowSize.y = height;
 
-    //временно для недопузения искажений объектов игры при изменении размера окна
-    const float map_aspect_ratio = 13.f / 14.f;
+    //временно для недопущения искажений объектов игры при изменении размера окна
+    const float level_aspect_ratio = static_cast<float>(g_game->getCurrentLevelWidth()) / g_game->getCurrentLevelHeight();
+
     unsigned int viewPortWidth = g_windowSize.x;
     unsigned int viewPortheight = g_windowSize.y;
     unsigned int viewportLeftOffset = 0;
     unsigned int viewportBottomOffset = 0;
-    if (static_cast<float>(g_windowSize.x) / g_windowSize.y > map_aspect_ratio)
+
+    if (static_cast<float>(g_windowSize.x) / g_windowSize.y > level_aspect_ratio)
     {
-        viewPortWidth = static_cast<unsigned int>(g_windowSize.y * map_aspect_ratio);
+        viewPortWidth = static_cast<unsigned int>(g_windowSize.y * level_aspect_ratio);
         viewportLeftOffset = (g_windowSize.x - viewPortheight) / 2;
     }
     else
     {
-        viewPortheight = static_cast<unsigned int>(g_windowSize.x / map_aspect_ratio);
+        viewPortheight = static_cast<unsigned int>(g_windowSize.x / level_aspect_ratio);
         viewportBottomOffset = (g_windowSize.y - viewPortWidth) / 2;
     }
 
@@ -65,7 +67,7 @@ int main(int argc, char** argv)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    GLFWwindow* pWindow = glfwCreateWindow(g_windowSize.x, g_windowSize.y, "Battle City", nullptr, nullptr);
+    GLFWwindow* pWindow = glfwCreateWindow(2 * g_windowSize.x, 2 * g_windowSize.y, "Battle City", nullptr, nullptr);
     if (!pWindow)
     {
         std::cout << "glfwCreateWindow failed!" << std::endl;
@@ -97,8 +99,12 @@ int main(int argc, char** argv)
 
     {
         ResourceMenager::setExecutablePath(argv[0]);
+        //запускаем игру
         g_game->init(); 
-        //запись текущего времени
+        //для поддержания постоянной соотношения сторон окна
+        //glfwSetWindowSize(pWindow, static_cast<int>(g_game->getCurrentLevelWidth()), static_cast<int>(g_game->getCurrentLevelHeight()));
+       
+       //запись текущего времени
         auto lastTime = std::chrono::high_resolution_clock::now();
 
         /* Loop until the user closes the window */
