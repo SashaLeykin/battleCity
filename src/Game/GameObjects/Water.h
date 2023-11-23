@@ -29,7 +29,7 @@ public:
 	virtual void render() const override;
 
 	//для анимации спрайта
-	void update(const uint64_t delta) override;
+	void update(const double delta) override;
 	
 private:
 	void renderBlock(const EBlockLocation eBlockLocation) const;	

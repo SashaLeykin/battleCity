@@ -14,7 +14,7 @@ public:
 
 	void render();
 	//для смены кадров поля игры
-	void update(const uint64_t delta);
+	void update(const double delta);
 	//для надатия клавишь в игре
 	void setKey(const int key, const int action);
 	bool init();

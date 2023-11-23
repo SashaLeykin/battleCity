@@ -112,8 +112,8 @@ int main(int argc, char** argv)
         {
             //запись времени кадра
             auto currentTime = std::chrono::high_resolution_clock::now();
-            // разница времени
-            uint64_t duration = std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count();
+            // разница времени в милисекундах
+            double duration = std::chrono::duration<double, std::milli>(currentTime - lastTime).count();
                 lastTime = currentTime;
               g_game->update(duration);
                

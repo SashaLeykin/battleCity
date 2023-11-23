@@ -14,7 +14,7 @@ namespace RenderEngine {
 		//функци€ дл€ получени€ текущего кадра
 		size_t getCurrentFrame() const { return m_currentFrame; }
 		//функци€ дл€ обновлени€ текущего кадра
-		void apdate(const uint64_t delta);
+		void apdate(const double delta);
 
 	private:
 		//переменна€ дл€ хранени€ ссылки на текузий спрайт
@@ -22,9 +22,9 @@ namespace RenderEngine {
 		//переменна€ дл€ хранени€ текущего кадра
 		size_t m_currentFrame;
 		//текущее врем€ ѕродолжительности кадра
-		uint64_t m_currentFrameDuration;
+		double m_currentFrameDuration;
 		//текущее врем€ анимации
-		uint64_t m_currentAnimationTime;
+		double m_currentAnimationTime;
 	};
 
 }

@@ -30,7 +30,7 @@ void Water::render() const
 	renderBlock(EBlockLocation::BottomRight);
 }
 
-void Water::update(const uint64_t delta)
+void Water::update(const double delta)
 {
 	m_spriteAnimator.apdate(delta);
 }

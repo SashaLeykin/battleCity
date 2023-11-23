@@ -12,7 +12,7 @@ namespace RenderEngine {
 	{
 	}
 
-	void SpriteAnimator::apdate(const uint64_t delta)
+	void SpriteAnimator::apdate(const double delta)
 	{
 		
 			m_currentAnimationTime += delta;

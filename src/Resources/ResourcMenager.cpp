@@ -292,7 +292,7 @@ bool ResourceMenager::loadJSONResources(const std::string& JSONPath)
 				{
 					//создаем переменные для считывания в них данных из файла JSON
 					const std::string subTextureStr = currentFrame["subTexture"].GetString();
-					const uint64_t duration = currentFrame["duration"].GetUint64();
+					const double duration = currentFrame["duration"].GetDouble();
 					//получение координат из саб текстуры
 					const auto pTextureAtlas = getTexture(textureAtlas);
 					const auto pSubtexture = pTextureAtlas->getSubTexture(subTextureStr);

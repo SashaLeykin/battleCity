@@ -73,7 +73,7 @@ namespace RenderEngine {
 		//glDeleteBuffers(1, &m_EBO);
 		//glDeleteVertexArrays(1, &m_VAO);
 	}
-	void Sprite::render(const glm::vec2& position, const glm::vec2& size, const float rotation, const float layer, const size_t frameId) const
+	void Sprite::render(const glm::vec2& position, const glm::vec2& size, const float rotation, const float layer, const double frameId) const
 	{
 		//проверка текущий кадр равен ли предыдущему если не равен то перерисовываю
 		if (m_lastFrameId != frameId)
@@ -118,12 +118,12 @@ namespace RenderEngine {
 	{
 		m_framesDescriptions = std::move(framesDescriptions);
 	}
-	uint64_t Sprite::getFrameDuration(const size_t frameId) const
+	double Sprite::getFrameDuration(const double frameId) const
 	{
 		return m_framesDescriptions[frameId].duration;
 	}
 
-	size_t Sprite::getFrameCount() const
+	double Sprite::getFrameCount() const
 	{
 		return m_framesDescriptions.size();
 	}

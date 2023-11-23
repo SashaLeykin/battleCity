@@ -11,7 +11,7 @@ public:
 
 	//виртуальная
 	virtual void render() const = 0;
-	virtual void update(const uint64_t delta) {};
+	virtual void update(const double delta) {};
 	//деструктор
 	virtual ~IGameObject();
 

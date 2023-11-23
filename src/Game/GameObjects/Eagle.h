@@ -25,7 +25,7 @@ public:
 	virtual void render() const override;
 
 	//для анимации спрайта
-	void update(const uint64_t delta) override;
+	void update(const double delta) override;
 	
 private:	
 	//для создания блока кирпичной стены из 4 маленьких блоков

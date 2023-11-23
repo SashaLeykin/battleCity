@@ -23,7 +23,7 @@ namespace RenderEngine {
 		//вспомогательная структура для хранения готовых координат саб текстуры
 		//полность описывает кадр
 		struct FrameDescription {
-			FrameDescription(const glm::vec2 _leftBottomUV, const glm::vec2 _rightTopUV, const size_t _duration)
+			FrameDescription(const glm::vec2 _leftBottomUV, const glm::vec2 _rightTopUV, const double _duration)
 				:leftBottomUV(_leftBottomUV)
 				, rightTopUV(_rightTopUV)
 				, duration(_duration)
@@ -33,7 +33,7 @@ namespace RenderEngine {
 			//правый верхний угол
 			glm::vec2 rightTopUV;
 			//продолжительность
-			size_t duration;
+			double duration;
 		};
 
 		public:
@@ -50,13 +50,13 @@ namespace RenderEngine {
 			        const glm::vec2& size, 
 					const float rotation, 
 					const float layer = 0.f, 
-					const size_t frameId = 0) const;
+					const double frameId = 0) const;
 		
 		void insertFrames(std::vector<FrameDescription> framesDescriptions);
 
-		uint64_t getFrameDuration(const size_t frameId) const;
+		double getFrameDuration(const double frameId) const;
 		//возвращает колличество кадров
-		size_t getFrameCount() const;
+		double getFrameCount() const;
 
 
 	protected:
@@ -73,7 +73,7 @@ namespace RenderEngine {
 		std::vector<FrameDescription> m_framesDescriptions;
 		//для сохранения последнего отрисованного кадра
 		//mutable - возможность вносить изменения в константную функцию
-		mutable size_t m_lastFrameId;
+		mutable double m_lastFrameId;
 	};
 
 }
