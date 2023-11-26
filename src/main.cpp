@@ -8,6 +8,7 @@
 #include "Game/Game.h"
 #include "Resources/ResourcMenager.h"
 #include "Renderer/Renderer.h"
+#include "Physics/PhysicsEngine.h"
 
 glm::ivec2 g_windowSize(13 * 16, 14 * 16);
 //обернуто в уник поинтр для правильной выгрузки ресурсов
@@ -99,6 +100,8 @@ int main(int argc, char** argv)
 
     {
         ResourceMenager::setExecutablePath(argv[0]);
+        //добавить физика
+        PhysicsEngine::init();
         //запускаем игру
         g_game->init(); 
         //для поддержания постоянной соотношения сторон окна
@@ -116,7 +119,8 @@ int main(int argc, char** argv)
             double duration = std::chrono::duration<double, std::milli>(currentTime - lastTime).count();
                 lastTime = currentTime;
               g_game->update(duration);
-               
+               //обновление физики
+              PhysicsEngine::update(duration);
             
             /* Render here */
             RenderEngine::Renderer::clear();

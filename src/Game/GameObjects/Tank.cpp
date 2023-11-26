@@ -3,7 +3,7 @@
 #include "../../Resources/ResourcMenager.h"
 #include "../../Renderer/Sprite.h"
 
-Tank::Tank(const double velocity, 
+Tank::Tank(const double maxVelocity,
 		   const glm::vec2 position, 
 		   const glm::vec2& size, 
 		   const float layer)
@@ -13,7 +13,7 @@ Tank::Tank(const double velocity,
 	, m_pSprite_bottom(ResourceMenager::getSprite("tankSprite_bottom"))
 	, m_pSprite_left(ResourceMenager::getSprite("tankSprite_left"))
 	, m_pSprite_right(ResourceMenager::getSprite("tankSprite_right"))
-	,m_spriteAnimatop_top(m_pSprite_top)
+	, m_spriteAnimatop_top(m_pSprite_top)
 	, m_spriteAnimatop_bottom(m_pSprite_bottom)
 	, m_spriteAnimatop_left(m_pSprite_left)
 	, m_spriteAnimatop_right(m_pSprite_right)
@@ -21,9 +21,8 @@ Tank::Tank(const double velocity,
 	, m_spriteAnimatop_respawn(m_pSprite_respawn)
 	, m_pSprite_shield(ResourceMenager::getSprite("shield"))
 	, m_spriteAnimatop_shield(m_pSprite_shield)
-	, m_move(false)
-	, m_velocity(velocity)	
-	, m_moveOffset(glm::vec2(0.f, 1.f))
+	
+	, m_maxVelocity(maxVelocity)		
 	, m_isRespawning(true)
 	, m_hasShield(false)
 {	
@@ -43,6 +42,14 @@ Tank::Tank(const double velocity,
 			m_hasShield = false;			
 		}
 	);
+}
+
+void Tank::setVelocity(const double velocity)
+{
+	if (!m_isRespawning)
+	{
+		m_velocity = velocity;
+	}
 }
 
 void Tank::render() const
@@ -73,7 +80,7 @@ void Tank::render() const
 
 		if (m_hasShield)
 		{
-			m_pSprite_shield->render(m_position, m_size, m_rotation, m_layer, m_spriteAnimatop_shield.getCurrentFrame());
+			m_pSprite_shield->render(m_position, m_size, m_rotation, m_layer , m_spriteAnimatop_shield.getCurrentFrame());
 		}
 	}	
 }
@@ -91,29 +98,24 @@ void Tank::setOrientation(const EOrientation eOrientation)
 	switch (m_eOrientation)
 	{
 	case Tank::EOrientation::Top:		
-		m_moveOffset.x = 0.f;
-		m_moveOffset.y = 1.f;
+		m_direction.x = 0.f;
+		m_direction.y = 1.f;
 		break;
 	case Tank::EOrientation::Bottom:		
-		m_moveOffset.x = 0.f;
-		m_moveOffset.y = -1.f;
+		m_direction.x = 0.f;
+		m_direction.y = -1.f;
 		break;
 	case Tank::EOrientation::Left:		
-		m_moveOffset.x = -1.f;
-		m_moveOffset.y = 0.f;
+		m_direction.x = -1.f;
+		m_direction.y = 0.f;
 		break;
 	case Tank::EOrientation::Right:		
-		m_moveOffset.x = 1.f;
-		m_moveOffset.y = 0.f;
+		m_direction.x = 1.f;
+		m_direction.y = 0.f;
 		break;
 	default:
 		break;
 	}
-}
-//движется или нет
-void Tank::move(const bool move)
-{
-	m_move = move;
 }
 
 void Tank::update(const double delta)
@@ -132,12 +134,8 @@ void Tank::update(const double delta)
 			m_shieldTimer.update(delta);
 		}
 
-		if (m_move)
+		if (m_velocity > 0)
 		{
-			//нахождение позиции танка
-			m_position.x += static_cast<float>(delta * m_velocity * m_moveOffset.x);
-			m_position.y += static_cast<float>(delta * m_velocity * m_moveOffset.y);
-
 			switch (m_eOrientation)
 			{
 			case Tank::EOrientation::Top:

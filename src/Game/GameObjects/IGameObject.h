@@ -15,6 +15,15 @@ public:
 	//деструктор
 	virtual ~IGameObject();
 
+	//запрос позиции
+	virtual glm::vec2& getCurrentPosition() { return m_position; }
+	// запрос направления на объект
+	virtual glm::vec2& getCurrentDirection() { return m_direction; }
+	//запрос скорости
+	virtual double  getCurrentVelocity() { return m_velocity; }
+	//задать скорость
+	virtual void setVelocity(const double velocity);
+
 protected:
 	//переменные для классов детей
 	glm::vec2 m_position;
@@ -22,6 +31,10 @@ protected:
 	float m_rotation;
 	//для создания слоев
 	float m_layer;
+	//вектор направления на объект
+	glm::vec2 m_direction;
+	//скорость
+	double m_velocity;
 };
 
 #endif // !IGAMEOBJECT_H

@@ -39,7 +39,9 @@ private:
 	//std::unique_ptrЧ это интеллектуальный указатель, который владеет другим объектом
 	//  и управл€ет им через указатель и удал€ет этот объект, когда он unique_ptr выходит
 	//  за пределы области действи€.
-	std::unique_ptr<Tank> m_pTank;
+	//std::unique_ptr<Tank> m_pTank;
+	//измен€ем умный укезатель дл€ подключени€ физака к танку
+	std::shared_ptr<Tank> m_pTank;
 	//временно указатель не уровень
-	std::unique_ptr<Level> m_pLevel;
+	std::shared_ptr<Level> m_pLevel;
 };

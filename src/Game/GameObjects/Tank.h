@@ -22,7 +22,7 @@ public:
 	};
 
 	//конструктор
-	Tank(const double velocity, 
+	Tank(const double maxVelocity, 
 		 const glm::vec2 position, 
 		 const glm::vec2& size, 
 		 const float layer);
@@ -32,12 +32,12 @@ public:
 
 	//установка ориетации(направления) танка
 	void setOrientation(const EOrientation eOrientation);
-
-	//движение танка
-	void move(const bool move);
-
 	//для анимации спрайта
 	void update(const double delta) override;
+	//возвращение максимальной скорости
+	double getMaxVelocity() const { return m_maxVelocity; }
+	//переопределение функции для ограничения движения танка во время появления
+	void setVelocity(const double velocity) override;
 
 private:
 	EOrientation m_eOrientation;
@@ -61,13 +61,11 @@ private:
 	//подключение таймера
 	Timer m_respawnTimer;
 	Timer m_shieldTimer;
-
-	//переменная подтверждения движения
-	bool m_move;
+		
 	//скорость
-	double m_velocity;	
+	double m_maxVelocity;	
 	//переменная для хранения направдения движения танка
-	glm::vec2 m_moveOffset;
+	//glm::vec2 m_moveOffset;
 	//переменные для определения появления танка и имеет ли он щит
 	bool m_isRespawning;
 	bool m_hasShield;
