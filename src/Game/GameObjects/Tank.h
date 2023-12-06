@@ -10,6 +10,7 @@
 namespace RenderEngine {
 	class Sprite;
 }
+class Bullet;
 
 class Tank : public IGameObject {
 public:
@@ -38,9 +39,13 @@ public:
 	double getMaxVelocity() const { return m_maxVelocity; }
 	//переопределение функции для ограничения движения танка во время появления
 	void setVelocity(const double velocity) override;
+	//для стрельбы
+	void fire();
 
 private:
 	EOrientation m_eOrientation;
+	//для стрельбы указатель на пулю
+	std::shared_ptr<Bullet> m_pCurrentBullet;
 	//переменные самого спрайта в класе
 	std::shared_ptr<RenderEngine::Sprite> m_pSprite_top;
 	std::shared_ptr<RenderEngine::Sprite> m_pSprite_bottom;

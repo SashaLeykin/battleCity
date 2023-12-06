@@ -4,6 +4,8 @@
 
 #include <glm/vec2.hpp>
 
+#include "../../Physics/PhysicsEngine.h"
+
 class IGameObject {
 public:
 	//конструктор будет принимать позицию объекта
@@ -23,6 +25,10 @@ public:
 	virtual double  getCurrentVelocity() { return m_velocity; }
 	//задать скорость
 	virtual void setVelocity(const double velocity);
+	//
+	const glm::vec2& getSize() const { return m_size; }
+	//коллизии
+	const std::vector<Physics::AABB>& getColliders() const { return m_colliders; }
 
 protected:
 	//переменные для классов детей
@@ -35,6 +41,8 @@ protected:
 	glm::vec2 m_direction;
 	//скорость
 	double m_velocity;
+	//прямоугольники для колизии(столкновение
+	std::vector<Physics::AABB> m_colliders;
 };
 
 #endif // !IGAMEOBJECT_H

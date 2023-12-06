@@ -101,7 +101,7 @@ int main(int argc, char** argv)
     {
         ResourceMenager::setExecutablePath(argv[0]);
         //добавить физика
-        PhysicsEngine::init();
+        Physics::PhysicsEngine::init();
         //запускаем игру
         g_game->init(); 
         //для поддержания постоянной соотношения сторон окна
@@ -120,7 +120,7 @@ int main(int argc, char** argv)
                 lastTime = currentTime;
               g_game->update(duration);
                //обновление физики
-              PhysicsEngine::update(duration);
+              Physics::PhysicsEngine::update(duration);
             
             /* Render here */
             RenderEngine::Renderer::clear();

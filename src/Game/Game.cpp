@@ -15,8 +15,9 @@
 #include <iostream>
 
 Game::Game(const glm::ivec2& windowSize)
-	:m_eCurrentGameState(EGameState::Active)
-    , m_windowSize(windowSize)
+	: m_windowSize(windowSize)
+    , m_eCurrentGameState(EGameState::Active)
+    
 {
 	m_keys.fill(false);
 }
@@ -59,24 +60,29 @@ void Game::update(const double delta)
         else if (m_keys[GLFW_KEY_A])
         {
             m_pTank->setOrientation(Tank::EOrientation::Left);
-            //разрешаем двдение
+            //разрешаем движение
             m_pTank->setVelocity(m_pTank->getMaxVelocity());
         }
         else if (m_keys[GLFW_KEY_D])
         {
             m_pTank->setOrientation(Tank::EOrientation::Right);
-            //разрешаем двдение
+            //разрешаем движение
             m_pTank->setVelocity(m_pTank->getMaxVelocity());
         }
         else if (m_keys[GLFW_KEY_S])
         {
             m_pTank->setOrientation(Tank::EOrientation::Bottom);
-            //разрешаем двдение
+            //разрешаем движение
             m_pTank->setVelocity(m_pTank->getMaxVelocity());
         }
         else
         {
             m_pTank->setVelocity(0);
+        }
+        //стрельба
+        if (m_pTank && m_keys[GLFW_KEY_SPACE])
+        {
+            m_pTank->fire();
         }
         m_pTank->update(delta);
     }    
@@ -100,10 +106,12 @@ bool Game::init()
         return false;
     }
        
-    //
+    //задание уровнЯ
     m_pLevel = std::make_shared<Level>(ResourceMenager::getLeves()[0]);
     m_windowSize.x = static_cast<int>(m_pLevel->getLevelWidth());
     m_windowSize.y = static_cast<int>(m_pLevel->getLevelHeight());
+    //передача уровня в физический движок
+    Physics::PhysicsEngine::setCurrentLevel(m_pLevel);        
 
     //использование функции для отоброжения объекта(проекционная матрица)
     glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(m_windowSize.x), 0.f, static_cast<float>(m_windowSize.y), -100.f, 100.f);
@@ -117,7 +125,7 @@ bool Game::init()
     //инициализация танка 
     m_pTank = std::make_shared<Tank>(0.05, m_pLevel->getPlayerRespawn_1(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f);
     //
-    PhysicsEngine::addDynamicGameObject(m_pTank);
+    Physics::PhysicsEngine::addDynamicGameObject(m_pTank);
 
 
     //загрузка уровня

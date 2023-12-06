@@ -6,7 +6,7 @@
 namespace RenderEngine
 {
 	struct VertexBufferLayoutElement {
-		GLuint count; //количество
+		GLint count; //количество
 		GLenum type; //тип
 		GLboolean normalized; //будут ли они нормализованы
 		unsigned int size;
