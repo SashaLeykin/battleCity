@@ -12,13 +12,13 @@
 namespace RenderEngine {
 	class Sprite;
 }
-//о бъект BrickWall - Кирпичная стена
+
 class Water : public IGameObject {
 public:
 	//Класс enum не допускает неявного преобразования в int, а также не сравнивает 
 	// перечислители из разных перечислений.	
 	//для упрощения доступа к enum class EBrickState
-	enum class EBlockLocation {
+	enum class EBlockLocation : uint8_t {
 		TopLeft,
 		TopRight,
 		BottomLeft,
@@ -30,6 +30,8 @@ public:
 
 	//для анимации спрайта
 	void update(const double delta) override;
+
+	virtual bool collides(const EObjectType objectType) override;
 	
 private:
 	void renderBlock(const EBlockLocation eBlockLocation) const;	

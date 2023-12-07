@@ -46,7 +46,7 @@ namespace Physics {
 				}
 
 				const auto newPosition = currentObject->getCurrentPosition() + currentObject->getCurrentDirection() *
-					static_cast<float>(currentObject->getCurrentVelocity() * delta);
+					                     static_cast<float>(currentObject->getCurrentVelocity() * delta);
 				const auto& colliders = currentObject->getColliders();
 				std::vector<std::shared_ptr<IGameObject>> objectToCheck = m_pCurrentLevel->getObjectsInArea(newPosition, newPosition + currentObject->getSize());
 
@@ -55,11 +55,12 @@ namespace Physics {
 				for (const auto& currentObjectToCheck : objectToCheck)
 				{
 					const auto& collidersToCheck = currentObjectToCheck->getColliders();
-					if (!collidersToCheck.empty())
+					if (currentObjectToCheck->collides(currentObject->getObjectType()) && !collidersToCheck.empty())
 					{
 						if (hasIntersection(colliders, newPosition, collidersToCheck, currentObjectToCheck->getCurrentPosition()))
 						{
 							hasCollision = true;
+							currentObjectToCheck->onCollision();
 							break;
 						}
 					}
@@ -81,6 +82,7 @@ namespace Physics {
 					{
 						currentObject->getCurrentPosition() = glm::vec2(currentObject->getCurrentPosition().x, static_cast<unsigned int>(currentObject->getCurrentPosition().y / 8.f + 0.5f) * 8.f);
 					}
+					currentObject->onCollision();
 				}
 
 			}

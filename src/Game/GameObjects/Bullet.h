@@ -24,6 +24,8 @@ public:
 	virtual void render() const override;
 	bool isActive() const { return m_isActive; }
 	void fire(const glm::vec2& position, const glm::vec2& direction);
+	//столкновение
+	virtual void onCollision() override;
 
 private:
 	//переменные направления пули
@@ -32,6 +34,9 @@ private:
 	std::shared_ptr<RenderEngine::Sprite> m_pSprite_left;
 	std::shared_ptr<RenderEngine::Sprite> m_pSprite_right;
 	EOrientation m_eOrientation;
+
+	//скорость пули
+	double m_maxVelocity;
 
 	//активна ли выпущенная пуля?
 	bool m_isActive;

@@ -3,6 +3,7 @@
 
 #include <unordered_set>
 #include <memory>
+#include <vector>
 
 #include <glm/vec2.hpp>
 
@@ -14,7 +15,7 @@ namespace Physics {
 
 	//структура для определения прямоугольника опоясовающего объект для определения касания
 	struct AABB {
-		AABB(glm::vec2& _bottomLeft, glm::vec2 _topRight)
+		AABB(const glm::vec2& _bottomLeft, const glm::vec2 _topRight)
 			: bottomLeft(_bottomLeft)
 			, topRight(_topRight)
 		{}

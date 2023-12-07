@@ -8,8 +8,23 @@
 
 class IGameObject {
 public:
+	//для разграничевания какие объекты могут соприкосаться
+	enum class EObjectType {
+		BettonWall,
+		Border, //граница
+		BrickWall,
+		Bullet,
+		Eagle,
+		Ice, //Лед
+		Tank,
+		Tress,
+		Water,
+
+		Uncnown //Неизвестный
+	};
+
 	//конструктор будет принимать позицию объекта
-	IGameObject(const glm::vec2& position, const glm::vec2& size, const float rotation, const float layer);
+	IGameObject(const EObjectType objectType,const glm::vec2& position, const glm::vec2& size, const float rotation, const float layer);
 
 	//виртуальная
 	virtual void render() const = 0;
@@ -29,6 +44,12 @@ public:
 	const glm::vec2& getSize() const { return m_size; }
 	//коллизии
 	const std::vector<Physics::AABB>& getColliders() const { return m_colliders; }
+	//вернуть объект для столкновения
+	EObjectType getObjectType() const { return m_eObjectType; }
+
+	virtual bool collides(const EObjectType objectType) { return true; }
+
+	virtual void onCollision() {}
 
 protected:
 	//переменные для классов детей
@@ -37,6 +58,9 @@ protected:
 	float m_rotation;
 	//для создания слоев
 	float m_layer;
+	//переменная enum class EObjectType
+	EObjectType m_eObjectType;
+
 	//вектор направления на объект
 	glm::vec2 m_direction;
 	//скорость

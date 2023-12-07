@@ -7,7 +7,7 @@ Ice::Ice(const glm::vec2& position,
 	                 const glm::vec2& size,  
 	                 const float rotation,
 	                 const float layer)
-	: IGameObject(position, size, rotation, layer)	
+	: IGameObject(IGameObject::EObjectType::Ice, position, size, rotation, layer)
 	, m_sprites(ResourceMenager::getSprite("ice"))
 	, m_blockOffset{ glm::vec2(0, m_size.y / 2.f),
 					   glm::vec2(m_size.x / 2.f, m_size.y / 2.f),
